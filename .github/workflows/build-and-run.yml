@@ -1,0 +1,32 @@
+name: Build and Run .NET
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore leetcode.sln
+
+      - name: Build solution
+        run: dotnet build leetcode.sln --configuration Release --no-restore
+
+      - name: Run example project
+        run: |
+          dotnet run --project DataStructures/Challange01/Challange01/Challange01.csproj --configuration Release --no-restore
